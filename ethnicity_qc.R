@@ -1,3 +1,5 @@
+# This code is older than the "manual" ethnic analysis R code files
+# This one was used for Eigenstrat output and is modified from practicum days
 #====================================================================
 # FUNCTIONS
 #====================================================================
