@@ -83,7 +83,7 @@ newped2 <- sub.big.matrix(ped, firstRow = 1, lastRow = nrow(ped), firstCol = 7, 
   
   # 5. Model the association
   
-  print("Running Simple Logistic association model")
+  print("Running GEE independence association model")
   assoc.wrapper <- function(Genotype, snp.name, snp.pos, pheno, covariates, clusters) {
     SEX <- as.numeric(covar$SEX) -1
     PC1 <- covar$PC1
