@@ -137,7 +137,7 @@ write.csv(misclassified_males, "misclassified_males.csv", quote=F, row.names=F)
 
 ##### Plot of heterozygosity of autosomal chromosomes ############
 ##### (ie. due to possible sample contamination or actual inbreeding) ####
-HetAuto <- rbind(HetAutoF,HetAutoM)
+HetAuto <- rbind(HetAutoF,HetAutoM, HetAutoNoSex)
 boxplot(HetAuto$Het, 
         main="Box Plot of Heterozygosity\nfor Autosomal Chromosomes")
 iqr <- quantile(HetAuto$Het,0.75)-quantile(HetAuto$Het,0.25)
