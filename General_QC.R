@@ -110,9 +110,9 @@ HetSexM <- data.frame(Het=1-(XMales$O.HOM./XMales$N.NM.),
 HetSexF <- data.frame(Het=1-(XFemales$O.HOM./XFemales$N.NM.),
                      FID=XFemales$FID, IID=XFemales$IID)
 HetAutoNoSex <- data.frame(Het=1-(autosomeNoSex$O.HOM./autosomeNoSex$N.NM.),
-                          FID=autosomeNoSex$FID, IID=autosomeNoSex)
+                          FID=autosomeNoSex$FID, IID=autosomeNoSex$IID)
 HetSexNoSex <- data.frame(Het=1-(XNoSex$O.HOM./XNoSex$N.NM.),
-                          FID=XNoSex$FID, IID=XNoSex)
+                          FID=XNoSex$FID, IID=XNoSex$IID)
 
 # plot
 xmin <- min(HetAutoM$Het, HetAutoF$Het, HetAutoNoSex$Het)-min(HetAutoM$Het, HetAutoF$Het, HetAutoNoSex$Het)/10
