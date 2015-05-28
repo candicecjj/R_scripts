@@ -1,4 +1,6 @@
 # R script to find and list all duplicate SNPs
+# You may want to run it twice or thrice after the 1st round of removal
+
 args=(commandArgs(TRUE))
 #setwd("/Users/naim/Documents/Strug/141202-Spit_for_Science_all_samples/QC/")
 
