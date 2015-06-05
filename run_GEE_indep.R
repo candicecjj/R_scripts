@@ -16,17 +16,17 @@ library(doMC)
 library(foreach)
 registerDoMC(32)
 library(bigmemory)
-library(filehash)
 library(geepack)
 
 (num_cores_to_use <- getDoParWorkers())
 
 
 pca <- read.table(pcafilename)
-pca_remove_list <- read.table(pca_rm_list)
 if(length(which(is.na(pca[,7])))>0) pca <- pca[-which(is.na(pca[,7])),]
-pca <- subset(pca, !(as.character(pca[,2]) %in% as.character(pca_remove_list[,2])))
-
+if(!(pca_rm_list %in% c("NA","0", ""))) {
+  pca_remove_list <- read.table(pca_rm_list)
+  pca <- subset(pca, !(as.character(pca[,2]) %in% as.character(pca_remove_list[,2])))
+}
 
 fam <- read.table(paste0(plink_filename,".fam"), header=F)
 fam <- cbind(index=1:nrow(fam), fam)
