@@ -14,7 +14,7 @@ if(use_integrated_full_fam) {
   #exome_fam <- read.table("/Users/naim/Documents/Strug/UKRE/UKRE_original_data/150420-FULL_pedigree_structure_specification.txt", stringsAsFactors = F, header=T)
   #omni_fam <- read.table("/Users/naim/Documents/Strug/UKRE/UKRE_QC/omnichip/QC_v3/27_UKRE_id_updates3.fam", stringsAsFactors = F)
   exome_fam <- read.table("~/UKRE/UKRE_original_data/150420-FULL_pedigree_structure_specification.txt", stringsAsFactors = F, header=T)
-  omni_fam <- read.table("~UKRE/UKRE_QC/omnichip/QC_v3/27_UKRE_id_updates3.fam", stringsAsFactors = F)
+  omni_fam <- read.table("~/UKRE/UKRE_QC/omnichip/QC_v3/27_UKRE_id_updates3.fam", stringsAsFactors = F)
   commons <- Reduce(intersect, list(exome_fam[,2], omni_fam[,2]))
   omni_minus_commons_fam <- subset(omni_fam, !(omni_fam[,2] %in% commons))[,1:5]
   names(omni_minus_commons_fam) <- names(exome_fam)
