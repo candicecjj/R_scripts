@@ -67,6 +67,7 @@ getAllParents <- function(fam, full_fam, dummy_parent_string = "fake") {
   while(!is.null(parents)) {
     newfam <- subset(full_fam, full_fam[,2] %in% parents)
     parents <- getParents(newfam, full_fam, dummy_parent_string)
+    parents <- subset(parents, !(parents %in% all_parents))
     all_parents <- c(all_parents, parents)
   }
   return(all_parents)
