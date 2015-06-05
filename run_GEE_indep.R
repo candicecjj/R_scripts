@@ -1,8 +1,8 @@
 #!/hpf/tools/centos6/R/3.1.1/bin/R
-# GEE Exchangeable
+# GEE Independence
 # CTS = Genotype + Sex + PC1 + PC2 + PC3 + PC4
-# Syntax: Rscript run_logistic.R <bPLINK_filename> <raw_filename> <pca_filename> <pca_exclude_list> <outfile_name>
-# Example: Rscript run_GEE_exch.R UKRE_RDG_chr1 chr1.raw kingpcapc.ped king_pca_parents_with_missing_rdg.txt gee_exch_rdg_chr1_assoc.txt
+# Syntax: Rscript run_gee_indep.R <bPLINK_filename> <raw_filename> <pca_filename> <pca_exclude_list> <outfile_name>
+# Example: Rscript run_GEE_indep.R UKRE_RDG_chr1 chr1.raw kingpcapc.ped king_pca_parents_with_missing_rdg.txt gee_exch_rdg_chr1_assoc.txt
 
 args=(commandArgs(TRUE))
 
@@ -16,6 +16,7 @@ library(doMC)
 library(foreach)
 registerDoMC(32)
 library(bigmemory)
+library(filehash)
 library(geepack)
 
 (num_cores_to_use <- getDoParWorkers())
