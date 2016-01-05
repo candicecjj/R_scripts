@@ -120,7 +120,7 @@ write.table(results,outname, quote=F, row.names=F, col.names=T)
 
 
 
-# Also do regular linear regression - saving as a big list this time
+# Also do regular logistic regression - saving as a big list this time
 lmmodels <- list()
 length(lmmodels) <- length(snp_indexes)
 names(lmmodels) <- map[snp_indexes,2]
