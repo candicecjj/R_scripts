@@ -1,10 +1,10 @@
-setwd("/Users/naim/Documents/Strug/UKRE/Zeynep/151201_RDG/UPDATE/my_imputed_set_association/")
+setwd("/Users/naim/Documents/Strug/UKRE/UKRE_assoc/150615-UKRE_associations/CTS/")
 
-plink_filename <- "02_UKomniExome_rdg0_vs_rdg_0.8AR2"
-rawfilename <- "03_UKomniExome_rdg0_vs_rdg_0.8AR2.raw"
-pcafilename <- "kingpcapc.ped"
-pca_rm_list <- "pca_exclude.txt"
-outname <- "04_rdg0_vs_rdg_assoc_gee_indep_without_sardinians.txt"
+plink_filename <- "05_CTS_SS_elp4_wout_Sardinians"
+rawfilename <- "06_CTS_SS_elp4_wout_Sardinians.raw"
+pcafilename <- "kingpcapc_no_sardinians.ped"
+pca_rm_list <- "pca_exclude.txt"        # if no file, just enter the empty string ""
+outname <- "07_assoc_gee_indep_wout_Sardinians.txt"
 
 library(geepack)
 
@@ -38,7 +38,7 @@ num.individuals<-nrow(fam2)
 num.snps <- nrow(map)
 
 print("Loading raw file")
-ped <- read.table(rawfilename, header=T)  # Takes awhile... not recommended for huge datasets (>300,000 SNPs); use bigmemory implementation for larger datasets
+ped <- read.table(rawfilename, header=T)  # May take awhile... not recommended for huge datasets; use bigmemory implementation for big datasets
 
 
 # 2. Order the data
@@ -56,9 +56,9 @@ print("Generating covariates")
 covar <- NULL
 covar <- cbind(fam2[,1:2]) # FID/IID
 sex <- fam2[,5]
-PCs <- newpca2[,7:10] # 4 PCs 
+PCs <- newpca2[,7:9] # 3 PCs -- MODIFY ACCORDING TO NUMBER OF PC's REQUIRED
 covar <- cbind(covar, sex, PCs)
-names(covar) <- c("FID", "IID", "SEX", "PC1", "PC2","PC3", "PC4") 
+names(covar) <- c("FID", "IID", "SEX", "PC1", "PC2","PC3")  # MODIFY ACCORDING TO NUMBER OF PC's REQUIRED
 
 snpnames <- as.character(map$V2)
 chr <- map[,1]
@@ -72,15 +72,14 @@ FIDs <- as.numeric(fam2[,1])  # for this to work, class(fam2[,1]) %in% "factor" 
 print("Running GEE independence association model")
 assoc.wrapper <- function(Genotype, snp.chr, snp.pos, snp.name, pheno, covariates, clusters) {
   SEX <- as.numeric(covariates$SEX) -1
-  PC1 <- covariates$PC1
+  PC1 <- covariates$PC1    # MODIFY ACCORDING TO NUMBER OF PC's REQUIRED
   PC2 <- covariates$PC2
   PC3 <- covariates$PC3
-  PC4 <- covariates$PC4
-  datum <- data.frame(cts=pheno, SEX=SEX, Genotype=Genotype, PC1=PC1, PC2=PC2, PC3=PC3, PC4=PC4, clusters=clusters)
+  datum <- data.frame(cts=pheno, SEX=SEX, Genotype=Genotype, PC1=PC1, PC2=PC2, PC3=PC3, clusters=clusters)      # MODIFY ACCORDING TO NUMBER OF PC's REQUIRED
   datum <- na.omit(datum) # must omit missing data as GEE will fail otherwise
   tryCatch( # to deal with the situation where a particular GEE model does not converge or gives an error; the return will be NA
 { # first part of tryCatch -- executes first
-  model <- geeglm(cts ~ SEX + Genotype + PC1 + PC2 + PC3 + PC4, family="binomial",
+  model <- geeglm(cts ~ SEX + Genotype + PC1 + PC2 + PC3, family="binomial",    # MODIFY ACCORDING TO NUMBER OF PC's REQUIRED
                   data=datum, corstr="independence", id=clusters)
   coef.table <- coef(summary(model))
   wald <- as.numeric(coef.table$Wald[which(rownames(coef.table) == "Genotype")])
@@ -119,4 +118,17 @@ for(i in snp_indexes) {
 print("Writing results to file")
 write.table(results,outname, quote=F, row.names=F, col.names=T)
 
+
+
+# Also do regular linear regression - saving as a big list this time
+lmmodels <- list()
+length(lmmodels) <- length(snp_indexes)
+names(lmmodels) <- map[snp_indexes,2]
+counter<-0
+for(i in snp_indexes) {
+  counter <- counter+1
+  datum <- data.frame(cts=CTS, SEX=covar$SEX, Genotype=as.numeric(newped2[,i]), PC1=covar$PC1, PC2=covar$PC2, PC3=covar$PC3, clusters=FIDs)  # MODIFY ACCORDING TO NUMBER OF PC's REQUIRED
+  lmmodels[[counter]] <- glm(cts ~ SEX + Genotype + PC1 + PC2 + PC3, family="binomial", data=datum)   # MODIFY ACCORDING TO NUMBER OF PC's REQUIRED
+}
+lapply(lapply(lmmodels, summary), coef)
 
