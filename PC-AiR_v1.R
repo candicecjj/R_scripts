@@ -4,7 +4,7 @@
 args=(commandArgs(TRUE))
 
 
-bplink_filename <- as.character(args[1])
+bplink_filename <- as.character(args[1]) # Binary plink filename w/out the .bed/.bim/.fam extension
 kinship_filename <- as.character(args[2])
 out_prefix <- as.character(args[3])
 # reference_panels_included <- as.logical(args[4])  # feature to be implemented in later versions
@@ -69,6 +69,8 @@ write.table(mypcair$unrels, paste0(out_prefix,"_unrelateds.txt"),quote=F,row.nam
 
 print("Done")
 
-# Later versions will enable the plotting of cases and controls (v2), and if included, the reference panels (v3)
+# In my later R versions, will try to enable the plotting of cases and controls, and if included, the reference panels (v3)
+
+
 
 
